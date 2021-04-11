@@ -11,6 +11,17 @@ let io = socketIO(server);
 app.use(express.static(publicpath));
 io.on('connection',(socket)=>{
   console.log('user just connected');
+
+  socket.emit('newMessage',{
+    text:"hi from server"
+  });
+
+  socket.on('message',(message)=>{
+    console.log(message);
+    socket.broadcast.emit('newMessage',{
+      text:message.text,
+    })
+  });
   socket.on('disconnect',()=>{
     console.log('user just disconnected');
   });
